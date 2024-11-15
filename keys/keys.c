@@ -22,9 +22,12 @@ static char readKey()
 
 static void drawLeftBorder()
 {
-    for(int i = 0; i < 25; i++)
+    for(int i = 0; i < state.rows; i++)
     {
-        write(STDOUT_FILENO, "|\r\n", 3);
+        if(i == state.rows - 1)             // fixes bug where last row doesnt have "|"
+            write(STDOUT_FILENO, "|", 1);
+        else
+            write(STDOUT_FILENO, "|\r\n", 3);
     }
 }
 

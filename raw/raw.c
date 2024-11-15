@@ -2,6 +2,22 @@
 
 EditorState state;
 
+static void getWindowSize(int* rows, int* cols)
+{
+    struct winsize size;
+
+    if(ioctl(STDOUT_FILENO, TIOCGWINSZ, &size) != 0)
+        fatalError("Get window size failure");
+    *rows = size.ws_row;
+    *cols = size.ws_col;
+}
+
+// origMode is set when raw is enabled
+void getState()
+{
+    getWindowSize(&state.rows, &state.cols);
+}
+
 static void disableRaw()
 {
     if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &state.origMode) == -1)

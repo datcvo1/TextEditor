@@ -1,3 +1,2 @@
-# TextEditor
-Documented makefile for future reference
-subdir has partial implementation of calculator GUI using tkinter for practice
+Documented makefile for future reference.
+Subdir has partial implementation of calculator GUI using tkinter for practice.

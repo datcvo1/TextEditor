@@ -1,8 +1,9 @@
 #ifndef KEYS_H
 #define KEYS_H
 
-#include <unistd.h>
+#include <sys/ioctl.h>
 #include "../error/error.h"
+#include "../raw/raw.h"
 
 void processKeyPress();
 void refreshScreen(); 
