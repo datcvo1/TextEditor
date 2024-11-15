@@ -3,7 +3,7 @@
 
 #include <unistd.h>
 #include <termios.h>
-#include "error.h"
+#include "../error/error.h"
 
 void disableRaw();
 void enableRaw();
