@@ -1,10 +1,10 @@
 #include "raw.h"
 
-struct termios origMode;
+EditorState state;
 
-void disableRaw()
+static void disableRaw()
 {
-    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &origMode) == -1)
+    if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &state.origMode) == -1)
         fatalError("tcssetattr failed on shutdown");
 }
 
@@ -12,9 +12,9 @@ void enableRaw()
 {
     // get attributes from a terminal associated with given file descriptor, STDIN_FILENO, and place them in termios struct
     struct termios rawMode;
-    if(tcgetattr(STDIN_FILENO, &origMode) == -1)
+    if(tcgetattr(STDIN_FILENO, &state.origMode) == -1)
         fatalError("tcsgetattr failed");
-    rawMode = origMode;
+    rawMode = state.origMode;
 
     // "ICANON" is a bitflag, "~"" is bitwise NOT. "~ ICANON" turns off canonical mode, now process input byte by byte
     // bitwise "&" on flags field to change only specified flags and leave the rest the same

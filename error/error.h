@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include "../keys/keys.h"
 
 void fatalError(const char* errMsg);
 

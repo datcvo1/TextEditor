@@ -2,7 +2,7 @@
 # -Wextra -pedantic just more warnings
 # -std=c99 set c version to be used
 CFLAGS = -Wall -Wextra -pedantic -std=c99
-PREREQUISITES = main.c error/error.c error/error.h raw/raw.c raw/raw.h
+PREREQUISITES = main.c error/error.c error/error.h raw/raw.c raw/raw.h keys/keys.h keys/keys.c
 
 # build target "editor" with variable "PREREQUISITES" as required PREREQUISITES to build it
 editor: $(PREREQUISITES)	 								
