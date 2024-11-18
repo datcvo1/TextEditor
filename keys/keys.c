@@ -32,13 +32,34 @@ static void append(buffer* appBuf, char* str, int len)
 
 static void drawLeftBorder(buffer* leftBorder)
 {
-    append(leftBorder, "\x1b[K", 4);
-    for(int i = 0; i < state.rows; i++)
+
+    
+
+    char title[30];
+    int titleLen = sprintf(title, "| Editor v%f |", VERSION);
+    
+    int padding = (state.cols/2) - (titleLen/2);
+    for(int i = 0; i < padding; i++) append(leftBorder, " ", 2);    // title padding
+
+    append(leftBorder, title, titleLen);                            // add title
+    append(leftBorder, "\x1b[K", 4);                                // clear the rest of current line
+    append(leftBorder, "\r\n", 3);                                  // move to next line
+    append(leftBorder, "|", 2);                                     // draw border
+
+    for(int i = 0; i < state.cols - 1; i++)                         // add horizontal top border
     {
-        append(leftBorder, "|", 2);         // draw border
-        append(leftBorder, "\x1b[K", 4);    // clear the rest of current line
+        append(leftBorder, "~", 2);
+    }
+    append(leftBorder, "\x1b[K", 4);    
+    append(leftBorder, "\r\n", 3);      
+
+    for(int i = 2; i < state.rows; i++)                             // vertical left border
+    {
+        append(leftBorder, "|", 2);         
+
+        append(leftBorder, "\x1b[K", 4);    
         if(i < state.rows - 1)
-            append(leftBorder, "\r\n", 3);  // move to next line
+            append(leftBorder, "\r\n", 3);  
     }
 }
 
