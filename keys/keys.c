@@ -32,12 +32,13 @@ static void append(buffer* appBuf, char* str, int len)
 
 static void drawLeftBorder(buffer* leftBorder)
 {
+    append(leftBorder, "\x1b[K", 4);
     for(int i = 0; i < state.rows; i++)
     {
-        if(i == state.rows - 1)             // fixes bug where last row doesnt have "|"
-            append(leftBorder, "|", 2);
-        else
-            append(leftBorder, "|\r\n", 4);
+        append(leftBorder, "|", 2);         // draw border
+        append(leftBorder, "\x1b[K", 4);    // clear the rest of current line
+        if(i < state.rows - 1)
+            append(leftBorder, "\r\n", 3);  // move to next line
     }
 }
 
@@ -47,9 +48,7 @@ void refreshScreen()
 
     // write to terminal "\x1b" (escape character, 27 in decimal) followed by "["
     // escape sequences always start with escape character then [
-    // 2J is the command. J for Erase in Display command, with parameter 2 meaning erase all lines
-    append(&leftBorder, "\x1b[2J", 5);
-    // H with default parameters move cursor to home, top left
+    // H is the command. H for Erase in Display command, with no parameter meaning move cursor to home, top left
     append(&leftBorder, "\x1b[H", 4);
     drawLeftBorder(&leftBorder);
     append(&leftBorder, "\x1b[H", 4);
