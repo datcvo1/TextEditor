@@ -20,27 +20,42 @@ static char readKey()
     return c;
 }
 
-static void drawLeftBorder()
+static void append(buffer* appBuf, char* str, int len)
+{
+    char* newStr = realloc(appBuf->buf, appBuf->len + len);
+    if(!newStr) return;
+
+    memcpy(&newStr[appBuf->len], str, len);
+    appBuf->buf = newStr;
+    appBuf->len += len;
+}
+
+static void drawLeftBorder(buffer* leftBorder)
 {
     for(int i = 0; i < state.rows; i++)
     {
         if(i == state.rows - 1)             // fixes bug where last row doesnt have "|"
-            write(STDOUT_FILENO, "|", 1);
+            append(leftBorder, "|", 2);
         else
-            write(STDOUT_FILENO, "|\r\n", 3);
+            append(leftBorder, "|\r\n", 4);
     }
 }
 
 void refreshScreen() 
 {
+    buffer leftBorder = { NULL, 0 };
+
     // write to terminal "\x1b" (escape character, 27 in decimal) followed by "["
     // escape sequences always start with escape character then [
     // 2J is the command. J for Erase in Display command, with parameter 2 meaning erase all lines
-    write(STDOUT_FILENO, "\x1b[2J", 4);
+    append(&leftBorder, "\x1b[2J", 5);
     // H with default parameters move cursor to home, top left
-    write(STDOUT_FILENO, "\x1b[H", 3);
-    drawLeftBorder();
-    write(STDOUT_FILENO, "\x1b[H", 3);
+    append(&leftBorder, "\x1b[H", 4);
+    drawLeftBorder(&leftBorder);
+    append(&leftBorder, "\x1b[H", 4);
+
+    write(STDOUT_FILENO, leftBorder.buf, leftBorder.len);
+    free(leftBorder.buf);
 }
 
 void processKeyPress()
